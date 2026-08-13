@@ -24,3 +24,4 @@ Conventions:
 
 | Number | Problem | Difficulty | Primary Pattern | Status | Solution | Last Reviewed |
 | --- | --- | --- | --- | --- | --- | --- |
+| 217 | Contains Duplicate | Easy | Hashing | Solved | [Java](../../patterns/01-hashing/ContainsDuplicate.java) |  |

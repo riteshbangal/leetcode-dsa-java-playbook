@@ -179,6 +179,8 @@ before final 6: {3, 6, 8}
 
 ### Java
 
+Solution file: [ContainsDuplicate.java](ContainsDuplicate.java)
+
 ```java
 public boolean containsDuplicate(int[] nums) {
     Set<Integer> seen = new HashSet<>();
@@ -1432,7 +1434,7 @@ Some Level 3 behavior:
 ### Revisit after 3–4 sessions
 
 ```text
-[ ] Contains Duplicate
+[ ] [Contains Duplicate](ContainsDuplicate.java)
 [ ] Two Sum
 [ ] Valid Anagram
 [ ] Group Anagrams
