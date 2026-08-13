@@ -40,7 +40,7 @@ For each problem, the focus is to:
 .
 ├── patterns/              # Pattern notes and revision guides
 ├── problems/leetcode/     # LeetCode problem notes and Java solutions
-├── templates/             # Reusable note templates
+├── docs/                  # Minimal note templates and supporting docs
 ├── ROADMAP.md             # Planned learning order
 └── README.md
 ```
@@ -70,7 +70,7 @@ Each problem note follows a consistent structure:
 - Final complexity
 - Revision prompts
 
-Use [templates/problem-template.md](templates/problem-template.md) when adding a new LeetCode problem.
+Use [docs/problem-template.md](docs/problem-template.md) when adding a new LeetCode problem.
 
 ## Contributing
 
