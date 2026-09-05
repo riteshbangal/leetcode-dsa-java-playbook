@@ -20,8 +20,8 @@ Problem solutions are stored separately under [problems/leetcode](../problems/le
 | Number | Pattern | Status | Link |
 | --- | --- | --- | --- |
 | 01 | Hashing | Completed | [01-hashing](01-hashing/) |
-| 02 | Two Pointers | Planned | [Roadmap](../ROADMAP.md) |
-| 03 | Sliding Window | Planned | [Roadmap](../ROADMAP.md) |
+| 02 | Two Pointers | Completed | [02-two-pointers](02-two-pointers/) |
+| 03 | Sliding Window | Completed | [03-sliding-window](03-sliding-window/) |
 | 04 | Prefix Sum | Planned | [Roadmap](../ROADMAP.md) |
 | 05 | Binary Search | Planned | [Roadmap](../ROADMAP.md) |
 | 06 | Stack | Planned | [Roadmap](../ROADMAP.md) |
