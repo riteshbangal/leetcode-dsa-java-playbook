@@ -22,7 +22,7 @@ Problem solutions are stored separately under [problems/leetcode](../problems/le
 | 01 | Hashing | Completed | [01-hashing](01-hashing/) |
 | 02 | Two Pointers | Completed | [02-two-pointers](02-two-pointers/) |
 | 03 | Sliding Window | Completed | [03-sliding-window](03-sliding-window/) |
-| 04 | Prefix Sum | Planned | [Roadmap](../ROADMAP.md) |
+| 04 | Prefix Sum | Completed | [04-prefix-sum](04-prefix-sum/) |
 | 05 | Binary Search | Planned | [Roadmap](../ROADMAP.md) |
 | 06 | Stack | Planned | [Roadmap](../ROADMAP.md) |
 | 07 | Monotonic Stack | Planned | [Roadmap](../ROADMAP.md) |

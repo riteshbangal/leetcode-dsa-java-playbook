@@ -30,7 +30,7 @@ For each problem, the focus is to:
 
 ## Current Status
 
-- Completed patterns: [Hashing](patterns/01-hashing/), [Two Pointers](patterns/02-two-pointers/), and [Sliding Window](patterns/03-sliding-window/)
+- Completed patterns: [Hashing](patterns/01-hashing/), [Two Pointers](patterns/02-two-pointers/), [Sliding Window](patterns/03-sliding-window/), and [Prefix Sum](patterns/04-prefix-sum/)
 - Problem index: [LeetCode problems](problems/leetcode/)
 - Full learning plan: [ROADMAP.md](ROADMAP.md)
 
