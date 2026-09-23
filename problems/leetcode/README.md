@@ -25,3 +25,4 @@ Conventions:
 | Number | Problem | Difficulty | Primary Pattern | Status | Solution | Last Reviewed |
 | --- | --- | --- | --- | --- | --- | --- |
 | 217 | Contains Duplicate | Easy | Hashing | Solved | [Java](../../patterns/01-hashing/ContainsDuplicate.java) |  |
+| 84 | Largest Rectangle in Histogram | Hard | Monotonic Stack | Guided solution; revision pending | [Java](0084-largest-rectangle-in-histogram/Solution.java) · [Notes](0084-largest-rectangle-in-histogram/README.md) | 2026-09-23 |

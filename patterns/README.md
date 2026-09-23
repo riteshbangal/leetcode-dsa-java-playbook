@@ -25,7 +25,7 @@ Problem solutions are stored separately under [problems/leetcode](../problems/le
 | 04 | Prefix Sum | Completed | [04-prefix-sum](04-prefix-sum/) |
 | 05 | Binary Search | Completed | [05-binary-search](05-binary-search/) |
 | 06 | Stack | Completed | [06-stack](06-stack/) |
-| 07 | Monotonic Stack | Planned | [Roadmap](../ROADMAP.md) |
+| 07 | Monotonic Stack | In progress | [07-monotonic-stack](07-monotonic-stack/) |
 | 08 | Linked List Pointers | Planned | [Roadmap](../ROADMAP.md) |
 | 09 | Heap / Priority Queue | Planned | [Roadmap](../ROADMAP.md) |
 | 10 | Tree DFS and BFS | Planned | [Roadmap](../ROADMAP.md) |
