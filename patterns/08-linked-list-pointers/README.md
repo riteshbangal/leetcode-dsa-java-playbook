@@ -130,13 +130,17 @@ slow.next = slow.next.next;
 
 ## Implementations
 
+The Java implementations live directly in this pattern folder, matching the established pattern-folder convention used by chapters such as `05-binary-search`.
+
 | Problem | Implementation |
 | --- | --- |
-| Reverse Linked List | [Solution.java](../../problems/leetcode/0206-reverse-linked-list/Solution.java) |
-| Middle of the Linked List | [Solution.java](../../problems/leetcode/0876-middle-of-the-linked-list/Solution.java) |
-| Linked List Cycle | [Solution.java](../../problems/leetcode/0141-linked-list-cycle/Solution.java) |
-| Merge Two Sorted Lists | [Solution.java](../../problems/leetcode/0021-merge-two-sorted-lists/Solution.java) |
-| Remove Nth Node From End | [Solution.java](../../problems/leetcode/0019-remove-nth-node-from-end-of-list/Solution.java) |
+| Reverse Linked List | [ReverseLinkedList.java](ReverseLinkedList.java) |
+| Middle of the Linked List | [MiddleOfLinkedList.java](MiddleOfLinkedList.java) |
+| Linked List Cycle | [LinkedListCycle.java](LinkedListCycle.java) |
+| Merge Two Sorted Lists | [MergeTwoSortedLists.java](MergeTwoSortedLists.java) |
+| Remove Nth Node From End | [RemoveNthNodeFromEnd.java](RemoveNthNodeFromEnd.java) |
+
+All implementations share the simple [ListNode.java](ListNode.java) representation for local compilation and revision.
 
 ## Complexity
 

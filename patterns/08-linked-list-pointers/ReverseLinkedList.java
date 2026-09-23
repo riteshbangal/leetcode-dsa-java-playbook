@@ -1,4 +1,4 @@
-class Solution {
+class ReverseLinkedList {
     public ListNode reverseList(ListNode head) {
         ListNode previous = null;
         ListNode current = head;

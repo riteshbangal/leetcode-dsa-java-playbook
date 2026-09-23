@@ -1,4 +1,4 @@
-class Solution {
+class MergeTwoSortedLists {
     public ListNode mergeTwoLists(ListNode list1, ListNode list2) {
         ListNode dummy = new ListNode(-1);
         ListNode tail = dummy;
