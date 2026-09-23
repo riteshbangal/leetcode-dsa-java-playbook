@@ -30,9 +30,10 @@ For each problem, the focus is to:
 
 ## Current Status
 
-- Completed patterns: [Hashing](patterns/01-hashing/), [Two Pointers](patterns/02-two-pointers/), [Sliding Window](patterns/03-sliding-window/), [Prefix Sum](patterns/04-prefix-sum/), [Binary Search](patterns/05-binary-search/), [Stack](patterns/06-stack/), and [Monotonic Stack](patterns/07-monotonic-stack/)
+- Completed patterns: [Hashing](patterns/01-hashing/), [Two Pointers](patterns/02-two-pointers/), [Sliding Window](patterns/03-sliding-window/), [Prefix Sum](patterns/04-prefix-sum/), [Binary Search](patterns/05-binary-search/), [Stack](patterns/06-stack/), [Monotonic Stack](patterns/07-monotonic-stack/), and [Linked List Pointers](patterns/08-linked-list-pointers/)
 - Pattern 07 completion means preliminary coverage and reference-code consolidation; independent revision remains pending as recorded in its chapter README.
-- Next pattern: **08 — Linked List Pointers**.
+- Pattern 08 core coverage includes five completed problems; Reorder List is intentionally deferred to revision.
+- Next pattern: **09 — Heap / Priority Queue**.
 - Problem index: [LeetCode problems](problems/leetcode/)
 - Full learning plan: [ROADMAP.md](ROADMAP.md)
 
