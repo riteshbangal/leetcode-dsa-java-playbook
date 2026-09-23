@@ -30,7 +30,9 @@ For each problem, the focus is to:
 
 ## Current Status
 
-- Completed patterns: [Hashing](patterns/01-hashing/), [Two Pointers](patterns/02-two-pointers/), [Sliding Window](patterns/03-sliding-window/), [Prefix Sum](patterns/04-prefix-sum/), [Binary Search](patterns/05-binary-search/), and [Stack](patterns/06-stack/)
+- Completed patterns: [Hashing](patterns/01-hashing/), [Two Pointers](patterns/02-two-pointers/), [Sliding Window](patterns/03-sliding-window/), [Prefix Sum](patterns/04-prefix-sum/), [Binary Search](patterns/05-binary-search/), [Stack](patterns/06-stack/), and [Monotonic Stack](patterns/07-monotonic-stack/)
+- Pattern 07 completion means preliminary coverage and reference-code consolidation; independent revision remains pending as recorded in its chapter README.
+- Next pattern: **08 — Linked List Pointers**.
 - Problem index: [LeetCode problems](problems/leetcode/)
 - Full learning plan: [ROADMAP.md](ROADMAP.md)
 
@@ -40,7 +42,6 @@ For each problem, the focus is to:
 .
 ├── patterns/              # Pattern notes and revision guides
 ├── problems/leetcode/     # LeetCode problem notes and Java solutions
-├── docs/                  # Minimal note templates and supporting docs
 ├── ROADMAP.md             # Planned learning order
 └── README.md
 ```
@@ -51,8 +52,9 @@ For each problem, the focus is to:
 - Use two-digit numeric prefixes for pattern folders, such as `01-hashing`.
 - Use four-digit LeetCode problem numbers.
 - Use the problem folder format `0001-two-sum`.
-- Each problem folder contains `README.md` and `Solution.java`.
-- Java solutions use `class Solution` for LeetCode compatibility.
+- Each problem folder contains `README.md` and its Java implementation.
+- Standard Java solutions use `class Solution` for LeetCode compatibility; design problems use the required API class, such as `StockSpanner`.
+- Generic exercises and batch variants can live directly in their pattern folder.
 - Keep one canonical solution folder per problem.
 - Pattern notes link to problems instead of duplicating full problem explanations.
 
@@ -70,7 +72,7 @@ Each problem note follows a consistent structure:
 - Final complexity
 - Revision prompts
 
-Use [docs/problem-template.md](docs/problem-template.md) when adding a new LeetCode problem.
+Use an existing [problem note](problems/leetcode/0084-largest-rectangle-in-histogram/README.md) as a structural reference when adding a new LeetCode problem.
 
 ## Contributing
 
