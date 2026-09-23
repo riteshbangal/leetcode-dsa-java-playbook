@@ -2,7 +2,7 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Arrays;
 
-class Solution {
+class NextGreaterElementII {
     // Simulates two copies without allocating a doubled array.
     // O(n) time and O(n) auxiliary space.
     public int[] nextGreaterElements(int[] nums) {

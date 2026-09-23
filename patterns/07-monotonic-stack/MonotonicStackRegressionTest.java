@@ -17,9 +17,9 @@ class MonotonicStackRegressionTest {
             case "smaller": type = "NextSmallerElementRight"; name = "nextSmallerIndices"; break;
             case "previous": type = "PreviousSmallerElementLeft"; name = "previousSmallerIndices"; break;
             case "span": type = "StockSpan"; name = "calculateSpans"; break;
-            case "daily": type = "Solution"; name = "dailyTemperatures"; break;
-            case "circular": type = "Solution"; name = "nextGreaterElements"; break;
-            case "mapped": type = "Solution"; name = "nextGreaterElement"; break;
+            case "daily": type = "DailyTemperatures"; name = "dailyTemperatures"; break;
+            case "circular": type = "NextGreaterElementII"; name = "nextGreaterElements"; break;
+            case "mapped": type = "NextGreaterElementI"; name = "nextGreaterElement"; break;
             case "online": type = "StockSpanner"; name = "next"; break;
             default: throw new IllegalArgumentException(mode);
         }

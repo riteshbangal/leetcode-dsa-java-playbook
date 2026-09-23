@@ -1,7 +1,7 @@
 import java.util.ArrayDeque;
 import java.util.Deque;
 
-class Solution {
+class LargestRectangleInHistogram {
     // Assumes nonnegative heights and an area that fits in int.
     // Time: O(n). Auxiliary space: O(n). Does not modify heights.
     public int largestRectangleArea(int[] heights) {

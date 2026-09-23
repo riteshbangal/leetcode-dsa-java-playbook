@@ -1,7 +1,7 @@
 import java.util.ArrayDeque;
 import java.util.Deque;
 
-class Solution {
+class DailyTemperatures {
     // Each index waits for its first strictly warmer day.
     // O(n) time and O(n) auxiliary space.
     public int[] dailyTemperatures(int[] temperatures) {

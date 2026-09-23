@@ -3,7 +3,7 @@ import java.util.Deque;
 import java.util.HashMap;
 import java.util.Map;
 
-class Solution {
+class NextGreaterElementI {
     // Assumes distinct values in nums2 and every nums1 value occurs in nums2.
     // Expected O(nums1.length + nums2.length) time; O(nums2.length) auxiliary space.
     public int[] nextGreaterElement(int[] nums1, int[] nums2) {

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Compile isolated Java solutions and compare them with brute-force oracles."""
+"""Compile Pattern 07 Java solutions and compare them with brute-force oracles."""
 from pathlib import Path
 import re
 import shutil
@@ -8,7 +8,7 @@ import tempfile
 
 ROOT = Path(__file__).resolve().parents[2]
 CHAPTER = ROOT / "patterns/07-monotonic-stack"
-PROBLEMS = ROOT / "problems/leetcode"
+
 
 def main():
     java = shutil.which("java")
@@ -21,10 +21,10 @@ def main():
         ("smaller", CHAPTER / "NextSmallerElementRight.java"),
         ("previous", CHAPTER / "PreviousSmallerElementLeft.java"),
         ("span", CHAPTER / "StockSpan.java"),
-        ("daily", PROBLEMS / "0739-daily-temperatures/Solution.java"),
-        ("mapped", PROBLEMS / "0496-next-greater-element-i/Solution.java"),
-        ("circular", PROBLEMS / "0503-next-greater-element-ii/Solution.java"),
-        ("online", PROBLEMS / "0901-online-stock-span/StockSpanner.java"),
+        ("daily", CHAPTER / "DailyTemperatures.java"),
+        ("mapped", CHAPTER / "NextGreaterElementI.java"),
+        ("circular", CHAPTER / "NextGreaterElementII.java"),
+        ("online", CHAPTER / "StockSpanner.java"),
     ]
     total = 0
     with tempfile.TemporaryDirectory(prefix="monotonic-stack-tests-", dir=ROOT) as temporary:
@@ -38,16 +38,17 @@ def main():
             print(result.stdout, end="")
             total += int(re.search(r"Passed (\d+) checks", result.stdout).group(1))
 
-        histogram = PROBLEMS / "0084-largest-rectangle-in-histogram"
         build = Path(temporary) / "histogram"
         build.mkdir()
         subprocess.run(compiler + ["--release", "8", "-Xlint:all", "-d", str(build),
-            str(histogram / "Solution.java"), str(histogram / "SolutionTest.java")], check=True)
-        result = subprocess.run([java, "-cp", str(build), "SolutionTest"],
+            str(CHAPTER / "LargestRectangleInHistogram.java"),
+            str(CHAPTER / "LargestRectangleInHistogramTest.java")], check=True)
+        result = subprocess.run([java, "-cp", str(build), "LargestRectangleInHistogramTest"],
             check=True, capture_output=True, text=True)
         print("histogram: " + result.stdout, end="")
         total += int(re.search(r"Passed (\d+) checks", result.stdout).group(1))
     print("All 9 implementations passed; total checks: " + str(total))
+
 
 if __name__ == "__main__":
     main()

@@ -1,7 +1,7 @@
 import java.util.ArrayDeque;
 import java.util.Deque;
 
-public class StockSpanner {
+class StockSpanner {
     private final Deque<Entry> stack = new ArrayDeque<>();
     private int day = -1;
 

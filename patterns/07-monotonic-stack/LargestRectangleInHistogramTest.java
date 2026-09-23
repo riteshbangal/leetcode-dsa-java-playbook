@@ -1,7 +1,7 @@
 import java.util.Arrays;
 
-class SolutionTest {
-    private static final Solution SOLUTION = new Solution();
+class LargestRectangleInHistogramTest {
+    private static final LargestRectangleInHistogram SOLUTION = new LargestRectangleInHistogram();
     private static int checks;
 
     public static void main(String[] args) {
@@ -18,7 +18,6 @@ class SolutionTest {
         check(new int[] {2, 1, 5, 6, 2, 3}, 10);
         check(new int[] {0, 2, 2, 0}, 4);
 
-        // Compare every short input with an independent O(n^2) oracle.
         for (int length = 0; length <= 7; length++) {
             enumerate(new int[length], 0);
         }
