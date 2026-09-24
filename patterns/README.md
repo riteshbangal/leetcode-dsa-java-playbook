@@ -2,7 +2,7 @@
 
 A DSA pattern is a reusable way to recognize and solve a family of problems. In this repository, a pattern note focuses on the clues that suggest the pattern, the invariant that keeps the solution correct, and the Java tools commonly used to implement it.
 
-Numbered folders preserve the learning order. For example, `01-hashing` is the first completed pattern. Future pattern folders will be added only when they are actively studied.
+Numbered folders preserve the learning order. For example, `01-hashing` is the first completed pattern. Future pattern folders are added when they are actively studied.
 
 Each pattern README will contain:
 
@@ -12,8 +12,9 @@ Each pattern README will contain:
 - Typical complexity
 - Common mistakes
 - Related problems
+- Learning/revision status
 
-Problem solutions are stored separately under [problems/leetcode](../problems/leetcode/) and linked from pattern notes.
+During pattern study, the chapter's Java solutions, walkthroughs, and supporting code stay inside the corresponding numbered pattern folder. Standalone/canonical problem notes may also exist under [problems/leetcode](../problems/leetcode/) where useful, but a pattern chapter does not need to duplicate its solutions there.
 
 ## Pattern Index
 
@@ -27,8 +28,8 @@ Problem solutions are stored separately under [problems/leetcode](../problems/le
 | 06 | Stack | Completed | [06-stack](06-stack/) |
 | 07 | Monotonic Stack | Completed (preliminary; revision pending) | [07-monotonic-stack](07-monotonic-stack/) |
 | 08 | Linked List Pointers | Completed (core; Reorder List deferred to revision) | [08-linked-list-pointers](08-linked-list-pointers/) |
-| 09 | Heap / Priority Queue | Planned | [Roadmap](../ROADMAP.md) |
-| 10 | Tree DFS and BFS | Planned | [Roadmap](../ROADMAP.md) |
+| 09 | Heap / Priority Queue | Completed (preliminary core; Median deferred to revision) | [09-heap-priority-queue](09-heap-priority-queue/) |
+| 10 | Tree DFS and BFS | Next | [Roadmap](../ROADMAP.md) |
 | 11 | Binary Search Tree | Planned | [Roadmap](../ROADMAP.md) |
 | 12 | Graph DFS and BFS | Planned | [Roadmap](../ROADMAP.md) |
 | 13 | Topological Sort | Planned | [Roadmap](../ROADMAP.md) |
