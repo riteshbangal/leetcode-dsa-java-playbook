@@ -30,12 +30,13 @@ For each problem, the focus is to:
 
 ## Current Status
 
-- Completed patterns: [Hashing](patterns/01-hashing/), [Two Pointers](patterns/02-two-pointers/), [Sliding Window](patterns/03-sliding-window/), [Prefix Sum](patterns/04-prefix-sum/), [Binary Search](patterns/05-binary-search/), [Stack](patterns/06-stack/), [Monotonic Stack](patterns/07-monotonic-stack/), [Linked List Pointers](patterns/08-linked-list-pointers/), [Heap / Priority Queue](patterns/09-heap-priority-queue/), and [Tree DFS and BFS](patterns/10-tree-dfs-bfs/)
+- Completed patterns: [Hashing](patterns/01-hashing/), [Two Pointers](patterns/02-two-pointers/), [Sliding Window](patterns/03-sliding-window/), [Prefix Sum](patterns/04-prefix-sum/), [Binary Search](patterns/05-binary-search/), [Stack](patterns/06-stack/), [Monotonic Stack](patterns/07-monotonic-stack/), [Linked List Pointers](patterns/08-linked-list-pointers/), [Heap / Priority Queue](patterns/09-heap-priority-queue/), [Tree DFS and BFS](patterns/10-tree-dfs-bfs/), and [Binary Search Tree](patterns/11-binary-search-tree/)
 - Pattern 07 completion means preliminary coverage and reference-code consolidation; independent revision remains pending as recorded in its chapter README.
 - Pattern 08 core coverage includes five completed problems; Reorder List is intentionally deferred to revision.
 - Pattern 09 preliminary core coverage includes six covered problems; Find Median from Data Stream is intentionally deferred to revision, and the chapter README records guided/reference/independent status per problem.
 - Pattern 10 preliminary core coverage includes nine tree problems spanning recursive DFS, recursion-stack reasoning, BFS level traversal, and subtree composition; independent revision remains separate from chapter completion.
-- Next pattern: **11 — Binary Search Tree**.
+- Pattern 11 preliminary core coverage includes six BST problems spanning ordered search, global validation, inorder ordering, BST LCA, insertion, and minimum adjacent difference; Delete Node in a BST is intentionally deferred to revision.
+- Next pattern: **12 — Graph DFS and BFS**.
 - Problem index: [LeetCode problems](problems/leetcode/)
 - Full learning plan: [ROADMAP.md](ROADMAP.md)
 
