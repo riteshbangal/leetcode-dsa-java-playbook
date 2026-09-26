@@ -29,8 +29,8 @@ During pattern study, the chapter's Java solutions, walkthroughs, and supporting
 | 07 | Monotonic Stack | Completed (preliminary; revision pending) | [07-monotonic-stack](07-monotonic-stack/) |
 | 08 | Linked List Pointers | Completed (core; Reorder List deferred to revision) | [08-linked-list-pointers](08-linked-list-pointers/) |
 | 09 | Heap / Priority Queue | Completed (preliminary core; Median deferred to revision) | [09-heap-priority-queue](09-heap-priority-queue/) |
-| 10 | Tree DFS and BFS | Next | [Roadmap](../ROADMAP.md) |
-| 11 | Binary Search Tree | Planned | [Roadmap](../ROADMAP.md) |
+| 10 | Tree DFS and BFS | Completed (preliminary core; revision pending) | [10-tree-dfs-bfs](10-tree-dfs-bfs/) |
+| 11 | Binary Search Tree | Next | [Roadmap](../ROADMAP.md) |
 | 12 | Graph DFS and BFS | Planned | [Roadmap](../ROADMAP.md) |
 | 13 | Topological Sort | Planned | [Roadmap](../ROADMAP.md) |
 | 14 | Union Find | Planned | [Roadmap](../ROADMAP.md) |

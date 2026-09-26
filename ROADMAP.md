@@ -2,9 +2,9 @@
 
 Learn patterns in the order recorded by the repository's [pattern index](patterns/README.md).
 
-**Current milestone:** Pattern 09 — Heap / Priority Queue preliminary core coverage is complete. Six problems are covered, with per-problem learning status recorded in the [chapter README](patterns/09-heap-priority-queue/README.md#chapter-status). Find Median from Data Stream is intentionally deferred to revision.
+**Current milestone:** Pattern 10 — Tree DFS and BFS preliminary core coverage is complete. Nine problems are covered, spanning recursive DFS return contracts, recursion-stack reasoning, BFS level traversal, LCA propagation, and subtree matching. Per-problem learning status is recorded in the [chapter README](patterns/10-tree-dfs-bfs/README.md#chapter-status). Completion remains separate from independent revision/mastery.
 
-**Next:** Pattern 10 — Tree DFS and BFS, in a separate learning conversation.
+**Next:** Pattern 11 — Binary Search Tree, as a separate chapter from general binary-tree traversal and from Pattern 05 ordinary Binary Search.
 
 | Number | Pattern | Status | Material |
 | --- | --- | --- | --- |
@@ -17,8 +17,8 @@ Learn patterns in the order recorded by the repository's [pattern index](pattern
 | 07 | Monotonic Stack | Completed (preliminary; revision pending) | [Chapter](patterns/07-monotonic-stack/) |
 | 08 | Linked List Pointers | Completed (core; Reorder List deferred to revision) | [Chapter](patterns/08-linked-list-pointers/) |
 | 09 | Heap / Priority Queue | Completed (preliminary core; Median deferred to revision) | [Chapter](patterns/09-heap-priority-queue/) |
-| 10 | Tree DFS and BFS | Next | — |
-| 11 | Binary Search Tree | Planned | — |
+| 10 | Tree DFS and BFS | Completed (preliminary core; revision pending) | [Chapter](patterns/10-tree-dfs-bfs/) |
+| 11 | Binary Search Tree | Next | — |
 | 12 | Graph DFS and BFS | Planned | — |
 | 13 | Topological Sort | Planned | — |
 | 14 | Union Find | Planned | — |
