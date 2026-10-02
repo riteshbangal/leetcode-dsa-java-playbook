@@ -91,6 +91,52 @@ Keep smallest k -> max-heap of size k
 
 The root is the weakest member of the candidates currently being kept, so it is the easiest one to evict.
 
+## **Key mental model: choose the heap by what must be easy to remove**
+
+> **Do not choose min-heap or max-heap only from the final goal. Choose it from the candidate you need at the root — especially the candidate you may need to evict.**
+
+This is the important distinction:
+
+```text
+Need smallest item immediately       -> min-heap
+Need largest item immediately        -> max-heap
+
+Keep largest k candidates            -> min-heap of size k
+  root = smallest among the kept k
+  root = weakest kept candidate
+  evict root when size > k
+
+Keep smallest k candidates           -> max-heap of size k
+  root = largest among the kept k
+  root = weakest kept candidate
+  evict root when size > k
+```
+
+### Why K Closest uses a max-heap
+
+Suppose the values below represent distances and `k = 3`:
+
+```text
+1, 5, 2, 4, 7, 3
+```
+
+We want to keep only the **3 smallest distances seen so far**.
+
+| Incoming | Candidates after insert | Root before eviction | Evicted if size > 3 | Kept candidates |
+| ---: | --- | ---: | ---: | --- |
+| 1 | {1} | **1** | — | {1} |
+| 5 | {1, 5} | **5** | — | {1, 5} |
+| 2 | {1, 2, 5} | **5** | — | {1, 2, 5} |
+| 4 | {1, 2, 4, 5} | **5** | **5** | {1, 2, 4} |
+| 7 | {1, 2, 4, 7} | **7** | **7** | {1, 2, 4} |
+| 3 | {1, 2, 3, 4} | **4** | **4** | {1, 2, 3} |
+
+The answer needs the **closest** points, but the heap root should be the **farthest currently retained point**, because that is the one we want to remove when a better candidate arrives.
+
+> **For K Closest: keep the best `k` candidates, but expose the worst of those `k` at the root. That is why the bounded heap is a max-heap.**
+
+Also remember: a heap does **not** maintain a guaranteed "second top". After `poll()`, the heap reheapifies and promotes the correct remaining min/max to the root.
+
 ## Java comparator rules
 
 The queue may store integers, map entries, points, nodes, or custom objects. The comparator defines what "priority" means.
@@ -106,6 +152,38 @@ Linked-list node value:
 ```java
 (a, b) -> Integer.compare(a.val, b.val)
 ```
+
+### **Comparator direction: `a, b` vs `b, a`**
+
+For Java's `PriorityQueue`, if:
+
+```java
+compare(a, b) < 0
+```
+
+then `a` has higher priority than `b` and can appear closer to the root.
+
+For normal integers:
+
+```java
+// Min-heap: smaller value gets higher priority
+(a, b) -> Integer.compare(a, b)
+
+// Max-heap: larger value gets higher priority
+(a, b) -> Integer.compare(b, a)
+```
+
+For computed priorities such as squared distance:
+
+```java
+// Min-heap by distance: closest point at root
+(a, b) -> Long.compare(distanceSquared(a), distanceSquared(b))
+
+// Max-heap by distance: farthest point at root
+(a, b) -> Long.compare(distanceSquared(b), distanceSquared(a))
+```
+
+> **Shortcut:** `a, b` keeps the natural ascending priority; `b, a` reverses it.
 
 Squared distance for a max-heap:
 
