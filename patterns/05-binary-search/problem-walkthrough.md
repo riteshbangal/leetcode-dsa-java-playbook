@@ -1,6 +1,8 @@
 # Binary Search — Problem Walkthrough
 
-This walkthrough develops binary search in layers. Each problem changes one part of the reasoning while preserving the same central invariant: the current candidate interval still contains every possible answer.
+At each step, ask what the comparison lets you discard. A peak search only needs to keep **one** peak; a boundary search can save a match outside the interval while it looks for a better one.
+
+In the pseudocode, indices start at `0` and `//` means integer division rounded down.
 
 ## 1. Binary Search
 
@@ -24,6 +26,24 @@ Start with the inclusive interval `[0, 5]`.
 Why is the first elimination safe? Because the array is sorted. If `nums[mid] < target`, every value at or left of `mid` is also too small.
 
 **Invariant:** If the target remains possible, its index is inside `[left, right]`.
+
+**Pseudocode:**
+
+```text
+function search(nums, target):
+    left, right = 0, length(nums) - 1
+    while left <= right:
+        mid = left + (right - left) // 2
+        if nums[mid] < target:
+            left = mid + 1
+        else if nums[mid] > target:
+            right = mid - 1
+        else:
+            return mid
+    return -1
+```
+
+**Java implementation:** [BinarySearch.java](BinarySearch.java).
 
 **Complexity:** `O(log n)` time and `O(1)` extra space.
 
@@ -52,6 +72,24 @@ For `target = 7`, the final `left` is `4`, which correctly represents insertion 
 
 **Invariant:** All indices before `left` contain values less than the target; all indices after `right` contain values greater than the target.
 
+**Pseudocode:**
+
+```text
+function searchInsert(nums, target):
+    left, right = 0, length(nums) - 1
+    while left <= right:
+        mid = left + (right - left) // 2
+        if nums[mid] < target:
+            left = mid + 1
+        else if nums[mid] > target:
+            right = mid - 1
+        else:
+            return mid
+    return left    # Insertion index; may equal length(nums).
+```
+
+**Java implementation:** [SearchInsertPosition.java](SearchInsertPosition.java).
+
 **Complexity:** `O(log n)` time and `O(1)` extra space.
 
 ## 3. First Occurrence
@@ -77,6 +115,26 @@ The saved candidate matters. The remaining left interval might not contain anoth
 
 **Invariant:** `firstIndex` is the best matching index found so far, and any better answer must be inside the remaining interval.
 
+**Pseudocode:**
+
+```text
+function findFirstOccurrence(nums, target):
+    left, right = 0, length(nums) - 1
+    firstIndex = -1
+    while left <= right:
+        mid = left + (right - left) // 2
+        if nums[mid] < target:
+            left = mid + 1
+        else if nums[mid] > target:
+            right = mid - 1
+        else:
+            firstIndex = mid
+            right = mid - 1    # Only an earlier match can improve firstIndex.
+    return firstIndex
+```
+
+**Java implementation:** [FindFirstOccurrence.java](FindFirstOccurrence.java).
+
 **Complexity:** `O(log n)` time and `O(1)` extra space.
 
 **Strong articulation:** “On equality, I save `mid` and eliminate `mid` plus everything to its right, because only a smaller index could improve the answer.”
@@ -95,6 +153,26 @@ left = mid + 1;
 Everything to the left, including `mid`, cannot improve a last-occurrence answer. A later copy may still exist to the right.
 
 **Invariant:** `lastIndex` is the best matching index found so far, and any better answer must be inside the remaining interval.
+
+**Pseudocode:**
+
+```text
+function findLastOccurrence(nums, target):
+    left, right = 0, length(nums) - 1
+    lastIndex = -1
+    while left <= right:
+        mid = left + (right - left) // 2
+        if nums[mid] < target:
+            left = mid + 1
+        else if nums[mid] > target:
+            right = mid - 1
+        else:
+            lastIndex = mid
+            left = mid + 1    # Only a later match can improve lastIndex.
+    return lastIndex
+```
+
+**Java implementation:** [FindLastOccurrence.java](FindLastOccurrence.java).
 
 **Complexity:** `O(log n)` time and `O(1)` extra space.
 
@@ -122,6 +200,35 @@ O(log n) + O(log n) = O(log n)
 ```
 
 **Invariant:** Each helper preserves its best boundary and searches only where a better boundary could exist.
+
+**Pseudocode:**
+
+```text
+function searchRange(nums, target):
+    first = boundary(nums, target, "first")
+    last = boundary(nums, target, "last")
+    return [first, last]
+
+# Java implements the two directions as findFirst and findLast.
+function boundary(nums, target, direction):
+    left, right = 0, length(nums) - 1
+    best = -1
+    while left <= right:
+        mid = left + (right - left) // 2
+        if nums[mid] < target:
+            left = mid + 1
+        else if nums[mid] > target:
+            right = mid - 1
+        else:
+            best = mid
+            if direction == "first":
+                right = mid - 1
+            else:
+                left = mid + 1
+    return best
+```
+
+**Java implementation:** [FindFirstAndLastPosition.java](FindFirstAndLastPosition.java).
 
 **Complexity:** `O(log n)` time and `O(1)` extra space.
 
@@ -152,6 +259,22 @@ Now `left == right == 4`, so return `nums[left]`, which is `0`.
 Why not use `left <= right`? When `left == right`, `mid` equals `right`, and `right = mid` would not shrink the interval. The `left < right` template stops as soon as one candidate remains.
 
 **Invariant:** The minimum's index always remains inside `[left, right]`.
+
+**Pseudocode:**
+
+```text
+function findMin(nums):
+    left, right = 0, length(nums) - 1
+    while left < right:
+        mid = left + (right - left) // 2
+        if nums[mid] > nums[right]:
+            left = mid + 1
+        else:
+            right = mid    # mid could be the minimum; keep it.
+    return nums[left]      # Minimum value, not its index.
+```
+
+**Java implementation:** [FindMinimumInRotatedSortedArray.java](FindMinimumInRotatedSortedArray.java).
 
 **Complexity:** `O(log n)` time and `O(1)` extra space.
 
@@ -197,6 +320,31 @@ The inequalities exclude `mid` because equality was already checked.
 
 **Common trap:** Do not return `-1` merely because the target is outside one sorted half. That proves the search must continue in the other half, not that the target is absent.
 
+**Pseudocode:**
+
+```text
+function search(nums, target):
+    left, right = 0, length(nums) - 1
+    while left <= right:
+        mid = left + (right - left) // 2
+        if nums[mid] == target:
+            return mid
+
+        if nums[left] <= nums[mid]:    # Left half is sorted.
+            if nums[left] <= target and target < nums[mid]:
+                right = mid - 1
+            else:
+                left = mid + 1
+        else:                          # Right half is sorted.
+            if nums[mid] < target and target <= nums[right]:
+                left = mid + 1
+            else:
+                right = mid - 1
+    return -1
+```
+
+**Java implementation:** [SearchInRotatedSortedArray.java](SearchInRotatedSortedArray.java).
+
 **Complexity:** `O(log n)` time and `O(1)` extra space.
 
 ## 8. Find Peak Element
@@ -220,6 +368,22 @@ Using `left < right` guarantees `mid < right`, making `mid + 1` a valid index.
 At termination, `left == right`. Return that index, not the value and not the last computed `mid`.
 
 **Invariant:** At least one peak remains inside `[left, right]`.
+
+**Pseudocode:**
+
+```text
+function findPeakElement(nums):
+    left, right = 0, length(nums) - 1
+    while left < right:
+        mid = left + (right - left) // 2
+        if nums[mid] < nums[mid + 1]:
+            left = mid + 1    # Rising slope: mid cannot be a peak.
+        else:
+            right = mid      # Falling slope: mid could be a peak.
+    return left              # Peak index, not its value.
+```
+
+**Java implementation:** [FindPeakElement.java](FindPeakElement.java).
 
 **Complexity:** `O(log n)` time and `O(1)` extra space.
 
@@ -271,6 +435,32 @@ Use exact integer ceiling division:
 
 **Invariant:** The minimum feasible speed remains inside `[left, right]`.
 
+**Pseudocode:**
+
+```text
+function minEatingSpeed(piles, h):
+    left = 1
+    right = max(piles)    # One hour per pile; h >= length(piles).
+    while left < right:
+        speed = left + (right - left) // 2
+        if canFinish(piles, h, speed):
+            right = speed
+        else:
+            left = speed + 1
+    return left
+
+function canFinish(piles, h, speed):
+    hoursNeeded = 0    # Use a 64-bit total in Java.
+    for pile in piles:
+        hoursForPile = 1 + (pile - 1) // speed
+        hoursNeeded += hoursForPile
+        if hoursNeeded > h:
+            return false
+    return true
+```
+
+**Java implementation:** [KokoEatingBananas.java](KokoEatingBananas.java).
+
 **Complexity:** `O(n log M)` time, where `M` is the largest pile, and `O(1)` extra space.
 
 ## 10. Capacity to Ship Packages Within D Days
@@ -295,6 +485,34 @@ For a candidate capacity, scan in order. Add weights to the current day until th
 If a capacity works, do not return immediately. A smaller feasible capacity may exist, so preserve `mid` with `right = mid`. If it fails, every smaller capacity also fails, so set `left = mid + 1`.
 
 **Invariant:** The minimum feasible capacity remains inside `[left, right]`.
+
+**Pseudocode:**
+
+```text
+function shipWithinDays(weights, days):
+    left, right = max(weights), sum(weights)
+    while left < right:
+        capacity = left + (right - left) // 2
+        if canShip(weights, days, capacity):
+            right = capacity
+        else:
+            left = capacity + 1
+    return left
+
+function canShip(weights, allowedDays, capacity):
+    daysNeeded = 1
+    load = 0
+    for weight in weights:    # Keep the original package order.
+        if load + weight > capacity:
+            daysNeeded += 1
+            load = 0
+        load += weight        # This package travels on the current day.
+        if daysNeeded > allowedDays:
+            return false
+    return true
+```
+
+**Java implementation:** [CapacityToShipPackagesWithinDDays.java](CapacityToShipPackagesWithinDDays.java).
 
 **Complexity:** `O(n log S)` time, where `S` is the sum of all weights, and `O(1)` extra space.
 
