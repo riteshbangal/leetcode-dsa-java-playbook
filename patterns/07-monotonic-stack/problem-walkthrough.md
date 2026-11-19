@@ -33,6 +33,19 @@ input order, and duplicate values may need different answers. For [2, 3, 2, 4],
 the two occurrences of 2 need answers 3 and 4 respectively. Indices preserve
 their identity.
 
+**Pseudocode (answers are values):**
+
+```text
+answer = array of length n filled with -1
+stack = empty stack of unresolved indices
+for i from 0 to n - 1:
+    while stack is not empty and nums[i] > nums[stack.top]:
+        waiting = stack.pop()
+        answer[waiting] = nums[i]
+    stack.push(i)
+return answer
+```
+
 **Implementation:** [NextGreaterElementRight.java](NextGreaterElementRight.java).
 **Complexity:** O(n) time, O(n) auxiliary space.
 
@@ -63,7 +76,20 @@ changes: when index j pops at current index i, write answer[j] = i - j.
 The learner's two peek() calls followed by pop() were valid; saving the popped
 index in a variable is clearer. Java already initializes int arrays to zero.
 
-**Implementation and notes:** [0739](../../problems/leetcode/0739-daily-temperatures/).
+**Pseudocode (answers are day distances):**
+
+```text
+answer = array of length n filled with 0
+stack = empty stack of unresolved day indices
+for i from 0 to n - 1:
+    while stack is not empty and temperatures[i] > temperatures[stack.top]:
+        earlierDay = stack.pop()
+        answer[earlierDay] = i - earlierDay
+    stack.push(i)
+return answer
+```
+
+**Implementation:** [DailyTemperatures.java](DailyTemperatures.java).
 **Complexity:** O(n) time, O(n) auxiliary space.
 
 ## 3. Next Greater Element I
@@ -92,7 +118,25 @@ If nums2 contained duplicates, a value alone would not identify an occurrence.
 Queries would need an index or an occurrence rule. Duplicate queries in nums1
 alone would be harmless when nums2 remains unique.
 
-**Implementation and notes:** [0496](../../problems/leetcode/0496-next-greater-element-i/).
+**Pseudocode (map keys and answers are values):**
+
+```text
+nextGreater = empty map from nums2 value to next greater value
+stack = empty stack of unresolved nums2 indices
+for i from 0 to length(nums2) - 1:
+    nextGreater[nums2[i]] = -1
+    while stack is not empty and nums2[i] > nums2[stack.top]:
+        waiting = stack.pop()
+        nextGreater[nums2[waiting]] = nums2[i]
+    stack.push(i)
+
+answer = array of length(nums1)
+for i from 0 to length(nums1) - 1:
+    answer[i] = nextGreater[nums1[i]]
+return answer
+```
+
+**Implementation:** [NextGreaterElementI.java](NextGreaterElementI.java).
 **Complexity:** expected O(n + m) time, O(n) auxiliary space, plus output.
 
 ## 4. Next Greater Element II
@@ -125,7 +169,25 @@ circular encounter is within the next n - 1 positions. Repeating values after
 that cannot introduce a previously unseen greater answer.
 Empty input performs zero iterations and never evaluates modulo zero.
 
-**Implementation and notes:** [0503](../../problems/leetcode/0503-next-greater-element-ii/).
+**Pseudocode (answers are values):**
+
+```text
+n = length(nums)
+answer = array of length n filled with -1
+stack = empty stack of unresolved original indices
+for step from 0 to 2 * n - 1:
+    i = step modulo n
+    while stack is not empty and nums[i] > nums[stack.top]:
+        waiting = stack.pop()
+        answer[waiting] = nums[i]
+    if step < n:
+        stack.push(i)
+return answer
+```
+
+For n = 0, the loop never runs, so the modulo operation is never reached.
+
+**Implementation:** [NextGreaterElementII.java](NextGreaterElementII.java).
 **Complexity:** O(n) time, O(n) auxiliary space.
 
 ## 5. Stock Span
@@ -165,8 +227,38 @@ The online reference preserves a deque of (price, dayIndex) and a day counter
 between next(price) calls. It returns today's span immediately. This API was
 added during consolidation, not independently implemented during the session.
 
+**Pseudocode (batch version, answers are spans):**
+
+```text
+span = array of length n
+stack = empty stack of indices whose prices are strictly decreasing
+for i from 0 to n - 1:
+    while stack is not empty and prices[stack.top] <= prices[i]:
+        stack.pop()
+    if stack is empty:
+        span[i] = i + 1
+    else:
+        span[i] = i - stack.top
+    stack.push(i)
+return span
+```
+
+**Pseudocode (online version, one price per call):**
+
+```text
+state: day = -1; stack = empty stack of (price, day) entries
+next(price):
+    day = day + 1
+    while stack is not empty and stack.top.price <= price:
+        stack.pop()
+    left = -1 if stack is empty, otherwise stack.top.day
+    span = day - left
+    stack.push((price, day))
+    return span
+```
+
 **Batch implementation:** [StockSpan.java](StockSpan.java).
-**Online implementation and notes:** [0901](../../problems/leetcode/0901-online-stock-span/).
+**Online implementation:** [StockSpanner.java](StockSpanner.java).
 **Complexity:** O(n) total time and O(n) space; online calls are amortized O(1).
 
 ## 6. Next and Previous Smaller Elements
@@ -201,6 +293,32 @@ Previous smaller:
 - Pop when top value >= current.
 - After popping, set answer[currentIndex] = remaining top or -1.
 - Equal values cannot serve as strictly smaller boundaries.
+
+**Pseudocode (next strictly smaller index):**
+
+```text
+answer = array of length n filled with -1
+stack = empty stack of unresolved indices
+for i from 0 to n - 1:
+    while stack is not empty and nums[i] < nums[stack.top]:
+        waiting = stack.pop()
+        answer[waiting] = i
+    stack.push(i)
+return answer
+```
+
+**Pseudocode (previous strictly smaller index):**
+
+```text
+answer = array of length n
+stack = empty stack of candidate indices
+for i from 0 to n - 1:
+    while stack is not empty and nums[stack.top] >= nums[i]:
+        stack.pop()
+    answer[i] = -1 if stack is empty, otherwise stack.top
+    stack.push(i)
+return answer
+```
 
 **Implementations:** [NextSmallerElementRight.java](NextSmallerElementRight.java)
 and [PreviousSmallerElementLeft.java](PreviousSmallerElementLeft.java).
@@ -246,8 +364,29 @@ right - left. Histogram uses the minimum of every covered bar and the number
 of bars. Fixing a height converts the histogram task to a smaller-boundary
 search; it does not inherit the container's two-pointer movement proof.
 
+**Pseudocode (answer is the largest area):**
+
+```text
+maxArea = 0
+stack = empty stack of bar indices with non-decreasing heights
+n = length(heights)
+for i from 0 through n:
+    currentHeight = 0 if i == n, otherwise heights[i]
+    while stack is not empty and heights[stack.top] > currentHeight:
+        height = heights[stack.pop()]
+        left = -1 if stack is empty, otherwise stack.top
+        width = i - left - 1
+        maxArea = max(maxArea, height * width)
+    if i < n:
+        stack.push(i)
+return maxArea
+```
+
+The virtual height at i = n ends pending rectangles; it is never pushed or
+read from the input array.
+
 **Full algorithm, twelve-row trace, equality proof, tests, and Java:**
-[0084 — Largest Rectangle in Histogram](../../problems/leetcode/0084-largest-rectangle-in-histogram/).
+[LargestRectangleInHistogram.java](LargestRectangleInHistogram.java).
 
 ## Final revision drill
 
