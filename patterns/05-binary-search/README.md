@@ -1,285 +1,134 @@
 # Pattern 05 — Binary Search
 
-Binary search is not merely “searching a sorted array.” Its deeper idea is:
+Before writing the loop, finish this sentence: **“After I compare at `mid`, I can discard ___ because ___.”** In a sorted array, the proof comes from value order. For a peak, it comes from two neighbors. For Koko or shipping, it comes from knowing that once a speed or capacity works, every larger one works too.
 
-> Use a comparison or monotonic condition to prove that one part of the current candidate space cannot contain the answer, then discard that part.
+[Jump to the 10 problems and their Java solutions](#implemented-problems) · [Worked traces and pseudocode](problem-walkthrough.md) · [All patterns](../README.md)
 
-The candidate space may be array indices, a rotated array, a local slope, or a numerical range of possible answers. The implementation becomes reliable when the interval meaning and pointer updates are chosen together.
+## Choose the loop by what the bounds mean
 
-For worked examples and traces, see [problem-walkthrough.md](problem-walkthrough.md).
+Both templates here use **inclusive** bounds. The difference is what you know when only one candidate remains.
 
-## Recognition Clues
+| What `[left, right]` means | Loop guard | When `left == right` |
+| --- | --- | --- |
+| Indices still to **test** for a match or a better match | `left <= right` | One index is unchecked. It could still hold the match you need. |
+| Candidate **indices** containing a minimum or peak index, or candidate **values** containing the minimum feasible value | `left < right` | The survivor identifies the answer. Return the index, its array value, or the feasible number as requested. |
 
-Consider binary search when:
+For the nonnegative bounds in this chapter, `mid = left + (right - left) / 2` takes the lower midpoint without computing `left + right`, which can overflow in Java. With `left < right`, that gives `left <= mid < right`: both `right = mid` and `left = mid + 1` shrink the interval. With `left <= right`, `right = mid` can get stuck on a singleton.
 
-- The input is sorted, partially sorted, or rotated.
-- The question asks for an index, insertion position, first occurrence, or last occurrence.
-- A comparison reveals which half cannot contain the answer.
-- The problem asks for a minimum or maximum feasible value.
-- Feasibility changes only once across an ordered answer space, such as `false, false, true, true`.
-- A local comparison, such as `nums[mid]` versus `nums[mid + 1]`, reveals a safe direction.
+## Test the midpoint: exact search and boundaries
 
-Sorted input is a common clue, but it is not the full rule. The essential requirement is an ordered decision that permits safe elimination.
-
-## Core Mental Model
-
-```mermaid
-flowchart TD
-    A[Define candidate interval] --> B[Inspect the midpoint]
-    B --> C{What does the comparison prove?}
-    C -->|Left side impossible| D[Move left rightward]
-    C -->|Right side impossible| E[Move right leftward]
-    D --> F[Repeat on smaller interval]
-    E --> F
-```
-
-At every iteration, be able to say:
-
-1. What does `[left, right]` represent?
-2. Can `mid` still be the answer?
-3. Which candidates are now impossible?
-4. Does the update make the interval strictly smaller?
-
-## Three Reusable Templates
-
-### 1. Exact search in a closed interval
-
-Use this when looking for an exact target and returning immediately on equality.
+In a sorted array, if `nums[mid] < target`, even the **largest** value in `[left, mid]` is too small. That proves the whole interval can go, not just the element at `mid`.
 
 ```java
-int left = 0;
-int right = nums.length - 1;
-
-while (left <= right) {
-    int mid = left + (right - left) / 2;
-
-    if (nums[mid] < target) {
-        left = mid + 1;
-    } else if (nums[mid] > target) {
-        right = mid - 1;
-    } else {
-        return mid;
+static int search(int[] nums, int target) {
+    int left = 0, right = nums.length - 1;
+    while (left <= right) {
+        int mid = left + (right - left) / 2;
+        if (nums[mid] < target) {
+            left = mid + 1;
+        } else if (nums[mid] > target) {
+            right = mid - 1;
+        } else {
+            return mid;
+        }
     }
+    return -1;
 }
-
-return -1;
 ```
 
-The interval is inclusive. When `left == right`, one candidate remains and must still be checked. Therefore the loop condition is `left <= right`.
+**Same trace, different return.** Search `[1, 3, 5, 6]` for `2`:
 
-### 2. Converging on one surviving candidate
+| Candidates | Midpoint observation | Next bounds |
+| --- | --- | --- |
+| `[0, 3]` | Index `1` holds `3`: too large | `right = 0` |
+| `[0, 0]` | Index `0` holds `1`: too small | `left = 1` |
 
-Use this when every iteration preserves an answer candidate and the pointers should meet on it.
+The bounds cross at `left = 1, right = 0`. **Exact search** returns `-1`. **Search Insert Position** returns `left`: everything before it is too small, so `2` belongs at index `1`. An insertion index can equal `nums.length`; return it without indexing the array. This problem uses distinct values. Returning immediately on a match would not guarantee the first copy among duplicates.
+
+**First or last occurrence:** Equality proves a match, not a boundary. Save `best = mid`, then set `right = mid - 1` for the first copy or `left = mid + 1` for the last. Return `best` (initially `-1`), not the last midpoint tested.
+
+**Rotated target search (distinct values):** Test `nums[mid] == target` first. If it misses, identify the sorted half and use its range:
+
+| Which half is sorted? | Is the target in that half’s value range? | If yes | If no |
+| --- | --- | --- | --- |
+| Left: `nums[left] <= nums[mid]` | `nums[left] <= target && target < nums[mid]` | `right = mid - 1` | `left = mid + 1` |
+| Right: `nums[left] > nums[mid]` | `nums[mid] < target && target <= nums[right]` | `left = mid + 1` | `right = mid - 1` |
+
+Being in range tells you **where to look**, not that the value exists. Return `-1` only after the interval is empty.
+
+## Keep one candidate: rotated minimum and peak
+
+For a **nonempty rotated sorted array with distinct values**, compare to the **right endpoint**, not a target. If `nums[mid] > nums[right]`, the drop to the minimum must be after `mid`. Otherwise `mid` itself could be the minimum.
 
 ```java
-int left = 0;
-int right = nums.length - 1;
-
-while (left < right) {
-    int mid = left + (right - left) / 2;
-
-    if (conditionSendsUsRight(mid)) {
-        left = mid + 1;
-    } else {
-        right = mid;
+static int findMin(int[] nums) {
+    int left = 0, right = nums.length - 1;
+    while (left < right) {
+        int mid = left + (right - left) / 2;
+        if (nums[mid] > nums[right]) {
+            left = mid + 1;
+        } else {
+            right = mid;
+        }
     }
+    return nums[left];
 }
-
-return left;
 ```
 
-Because `right = mid` can preserve `mid`, use `left < right`. At termination, `left == right`, so return either pointer—not a stale `mid`.
+On `[9, 4]`, the last `mid` is `0`, the surviving **index** is `1`, and the required **value** is `4`. Those are three different things.
 
-### 3. Binary search on the answer
+**Find Peak Element** assumes a nonempty array, unequal neighbors, and virtual values of negative infinity beyond the ends. Keep a rise into `left` and a fall after `right`. When `nums[mid] < nums[mid + 1]`, set `left = mid + 1`: that rising edge becomes the new left boundary. Otherwise set `right = mid`: the falling edge becomes the new right boundary. Reading `mid + 1` is safe because `mid < right`. When the bounds meet, both neighbors are smaller. Return the **index** `left`; you only had to keep **one** peak, not every peak.
 
-Use this when searching a numerical range rather than an actual array.
+## Search the answer: minimum feasible speed or capacity
 
-```java
-int left = minimumPossibleAnswer;
-int right = maximumPossibleAnswer;
-
-while (left < right) {
-    int mid = left + (right - left) / 2;
-
-    if (isFeasible(mid)) {
-        right = mid;
-    } else {
-        left = mid + 1;
-    }
-}
-
-return left;
-```
-
-The helper creates a monotonic sequence:
+Here the bounds are **candidate values**, not array indices. You never need to build an array of speeds or capacities. Start with an upper bound known to work. A feasible midpoint might be the minimum; an infeasible midpoint rules out every smaller value too.
 
 ```text
-not feasible ... not feasible | feasible ... feasible
+firstFeasible(low, high, works):
+    while low < high:
+        mid = low + floor((high - low) / 2)
+        if works(mid):
+            high = mid
+        else:
+            low = mid + 1
+    return low
 ```
 
-The goal is the first feasible value.
-
-## Interval Choices Must Stay Consistent
-
-| Question | Closed exact-search interval | Converging-candidate interval |
+| Problem | Inclusive bounds | What makes a candidate work? |
 | --- | --- | --- |
-| Initial bounds | `left = 0`, `right = n - 1` | `left = 0`, `right = n - 1` |
-| Loop | `left <= right` | `left < right` |
-| Exclude `mid` on left side | `right = mid - 1` | Depends on proof |
-| Preserve `mid` as candidate | Usually unnecessary | `right = mid` |
-| Termination | `left > right` | `left == right` |
-| Typical return | Match or sentinel | `left` or `right` |
+| Koko Eating Bananas | `1` to `max(piles)` | Sum the whole hours for **each** pile. The total must be `<= h`. At the upper bound, each pile takes one hour; the problem guarantees `h >= piles.length`. |
+| Ship Packages Within D Days | `max(weights)` (heaviest package) to `sum(weights)` (all fit in one day) | Load packages **in order**. Start a new day only if the next package would exceed capacity. Filling each day this way uses the fewest days for that capacity; check `daysNeeded <= days`. |
 
-Do not copy one line from one template into another without checking the interval invariant.
+For a positive pile and speed, Java’s `(pile - 1L) / speed + 1` rounds up without floating point. At speed `4`, a pile of `8` needs `2` hours, not `3`. Accumulate hours in a `long`. For shipping, if you generalize beyond the problem’s bounds, use `long` for the sum, candidate capacities, and load as well.
 
-## Safe Midpoint
+## Implemented problems
 
-Prefer:
+Each problem name goes directly to its trace or explanation and fenced pseudocode.
 
-```java
-int mid = left + (right - left) / 2;
-```
-
-It is algebraically equivalent to `(left + right) / 2`, but avoids overflow when both pointers are large.
-
-## Important Variations
-
-### Insertion position
-
-After an unsuccessful exact search, `left` is the first index whose value could be at least the target. Every index before it has been proven too small. Therefore `left` is the insertion position.
-
-### First and last occurrence
-
-Equality does not end the search when duplicates may contain a better boundary:
-
-- First occurrence: save `mid`, then continue left with `right = mid - 1`.
-- Last occurrence: save `mid`, then continue right with `left = mid + 1`.
-
-The saved answer must be preserved because a later search may find no additional match.
-
-### Rotated sorted arrays
-
-In a rotated sorted array with distinct values, at least one half around `mid` is sorted.
-
-- If `nums[left] <= nums[mid]`, the left half is sorted.
-- Otherwise, the right half is sorted.
-
-First determine the sorted half. Then test whether the target lies inside that half's value range. This range test tells you which half can safely be discarded.
-
-### Local slope search
-
-For a peak element, compare adjacent values:
-
-- `nums[mid] < nums[mid + 1]`: the slope rises, so a peak exists to the right.
-- Otherwise: `mid` may itself be a peak, so preserve it with `right = mid`.
-
-### Search on a numerical answer space
-
-Koko Eating Bananas and Capacity to Ship Packages do not provide an array of possible answers. We create an ordered range:
-
-- Koko speed: `[1, maxPile]`
-- Ship capacity: `[maxWeight, sumOfWeights]`
-
-Then a greedy helper determines whether a candidate is feasible.
-
-## Ceiling Division
-
-Koko needs the number of whole hours required for each pile:
-
-```java
-long hours = (pile - 1L) / speed + 1;
-```
-
-This equals `ceil(pile / speed)` using integer arithmetic. The `1L` promotes the calculation to `long`, helping prevent overflow during accumulation.
-
-For example:
-
-- `pile = 8`, `speed = 4` gives `2` hours.
-- `pile = 9`, `speed = 4` gives `3` hours.
-
-The tempting expression `pile / speed + 1` is wrong when the pile divides evenly by the speed.
-
-## Implemented Problems
-
-| Problem | Main lesson | Solution |
+| Walkthrough | What to return | Java implementation |
 | --- | --- | --- |
-| Binary Search | Closed interval and exact match | [BinarySearch.java](BinarySearch.java) |
-| Search Insert Position | `left` becomes the insertion boundary | [SearchInsertPosition.java](SearchInsertPosition.java) |
-| First Occurrence | Save a match and continue left | [FindFirstOccurrence.java](FindFirstOccurrence.java) |
-| Last Occurrence | Save a match and continue right | [FindLastOccurrence.java](FindLastOccurrence.java) |
-| First and Last Position | Compose two boundary searches | [FindFirstAndLastPosition.java](FindFirstAndLastPosition.java) |
-| Minimum in Rotated Sorted Array | Preserve the possible minimum | [FindMinimumInRotatedSortedArray.java](FindMinimumInRotatedSortedArray.java) |
-| Search in Rotated Sorted Array | Identify the sorted half | [SearchInRotatedSortedArray.java](SearchInRotatedSortedArray.java) |
-| Find Peak Element | Follow a local slope | [FindPeakElement.java](FindPeakElement.java) |
-| Koko Eating Bananas | First feasible speed | [KokoEatingBananas.java](KokoEatingBananas.java) |
-| Ship Packages Within D Days | First feasible capacity | [CapacityToShipPackagesWithinDDays.java](CapacityToShipPackagesWithinDDays.java) |
+| [1. Binary Search](problem-walkthrough.md#1-binary-search) | Matching index or `-1` | [BinarySearch.java](BinarySearch.java) |
+| [2. Search Insert Position](problem-walkthrough.md#2-search-insert-position) | Matching index or insertion index in `[0, n]` | [SearchInsertPosition.java](SearchInsertPosition.java) |
+| [3. First Occurrence](problem-walkthrough.md#3-first-occurrence) | Earliest matching index or `-1` | [FindFirstOccurrence.java](FindFirstOccurrence.java) |
+| [4. Last Occurrence](problem-walkthrough.md#4-last-occurrence) | Latest matching index or `-1` | [FindLastOccurrence.java](FindLastOccurrence.java) |
+| [5. Find First and Last Position](problem-walkthrough.md#5-find-first-and-last-position) | Both indices or `[-1, -1]` | [FindFirstAndLastPosition.java](FindFirstAndLastPosition.java) |
+| [6. Find Minimum in a Rotated Sorted Array](problem-walkthrough.md#6-find-minimum-in-a-rotated-sorted-array) | Minimum **value** | [FindMinimumInRotatedSortedArray.java](FindMinimumInRotatedSortedArray.java) |
+| [7. Search in a Rotated Sorted Array](problem-walkthrough.md#7-search-in-a-rotated-sorted-array) | Matching index or `-1` | [SearchInRotatedSortedArray.java](SearchInRotatedSortedArray.java) |
+| [8. Find Peak Element](problem-walkthrough.md#8-find-peak-element) | Index of **any** peak | [FindPeakElement.java](FindPeakElement.java) |
+| [9. Koko Eating Bananas](problem-walkthrough.md#9-koko-eating-bananas) | Minimum feasible eating speed | [KokoEatingBananas.java](KokoEatingBananas.java) |
+| [10. Capacity to Ship Packages Within D Days](problem-walkthrough.md#10-capacity-to-ship-packages-within-d-days) | Minimum feasible ship capacity | [CapacityToShipPackagesWithinDDays.java](CapacityToShipPackagesWithinDDays.java) |
 
 ## Complexity
 
-| Variation | Time | Extra space |
-| --- | --- | --- |
-| Exact or boundary search | `O(log n)` | `O(1)` |
-| Rotated-array search | `O(log n)` | `O(1)` |
-| Peak search | `O(log n)` | `O(1)` |
-| Koko | `O(n log M)`, `M = max(piles)` | `O(1)` |
-| Ship packages | `O(n log S)`, `S = sum(weights)` | `O(1)` |
+- **Index searches:** `O(log n)` time and `O(1)` extra space. Finding both boundaries takes two logarithmic searches, not a scan of the duplicate run.
+- **Answer searches:** Let `W = high - low + 1` be the number of candidate values at the start. Computing the bounds takes `O(n)`; each of at most `ceil(log2 W)` checks scans up to `n` items. Total: `O(n · (1 + log W))` time and `O(1)` extra space. When `W = 1`, the bounds scan is all you need.
 
-In answer-space problems, each midpoint requires an `O(n)` feasibility scan.
+## Interview check
 
-## Common Mistakes
+Say the **index**, the **observed value**, and the **reason for the update** separately:
 
-- Confusing an index with the value stored at that index.
-- Starting a closed interval with `right = nums.length` instead of `nums.length - 1`.
-- Using `left < right` for exact search and skipping the final candidate.
-- Combining `left <= right` with `right = mid`, which can create an infinite loop.
-- Returning `mid` after a convergence loop even though `mid` may be stale.
-- Returning immediately on equality when the problem asks for the first or last occurrence.
-- Saving a boundary match but forgetting to continue the search.
-- In rotated search, checking only value order without testing whether the target lies in the sorted range.
-- Returning `-1` inside one iteration of rotated search before the candidate interval is empty.
-- Treating Koko as total bananas divided by total hours; each pile consumes a separate whole number of hours.
-- Computing ceiling division as `pile / speed + 1`.
-- Accumulating large totals in `int` when `long` is safer.
+> “`mid` is index 3. Its value is 12. The target is 16, so in this sorted interval every index through 3 is too small. I move `left` to 4.”
 
-## Decision Map
+Before submitting, trace a singleton, a miss beyond the last element, and a run of duplicates where allowed. For a feasibility search, test a value that works **exactly** at the limit: equality is feasible, but it does not prove minimality.
 
-```mermaid
-flowchart TD
-    A{What is being searched?} -->|Exact target| B[Closed interval]
-    A -->|Boundary among duplicates| C[Save match and keep searching]
-    A -->|Single surviving index| D[Converge with left less than right]
-    A -->|Minimum feasible number| E[Search the answer range]
-    B --> F[Return match or minus one]
-    C --> G[First: go left; Last: go right]
-    D --> H[Return the meeting pointer]
-    E --> I[Use a monotonic feasibility helper]
-```
-
-## Articulation Template
-
-Before coding, explain the solution in this order:
-
-1. **Candidate space:** “The answer must lie between ___ and ___.”
-2. **Invariant:** “If an answer exists, the current interval still contains it.”
-3. **Midpoint evidence:** “This comparison proves ___ cannot contain the answer.”
-4. **Pointer update:** “Therefore I set ___ to ___.”
-5. **Termination:** “The loop ends when ___, which means ___.”
-6. **Return value:** “I return ___ because ___.”
-
-Clear articulation should name exact indices and inequalities. For example: “Because `nums[mid] < target`, every index from `left` through `mid` is too small, so the next candidate is `mid + 1`.”
-
-## Revision Checklist
-
-- Can I state exactly what `[left, right]` means?
-- Do I know whether `mid` remains a possible answer in each branch?
-- Does every update strictly reduce the interval?
-- Is the loop condition consistent with those updates?
-- Am I returning an index or a value?
-- For boundary search, did I preserve the best answer found so far?
-- For answer search, is the feasibility predicate monotonic?
-- Did I choose safe lower and upper bounds?
-- Could any total overflow an `int`?
-
-## Suggested Next Practice
-
-After these templates feel natural, revisit binary search on answer with harder partitioning problems such as Split Array Largest Sum. The main new challenge is usually the feasibility helper, not the binary-search loop itself.
+Optional follow-up for a later revision: in *Split Array Largest Sum*, what would the shipping capacity and the number of days represent?
